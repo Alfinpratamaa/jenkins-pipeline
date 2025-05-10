@@ -11,7 +11,25 @@ pipeline {
     }
     
     stages {
-        stage('Setup') {
+
+        stage('Install Java') {
+            steps {
+                script {
+                    // Install OpenJDK 11
+                    sh '''
+                    apk add --no-cache openjdk11
+                    java -version  // Verify Java installation
+                    '''
+                }
+            }
+        }
+        
+        stage('Run Jenkins Agent') {
+            steps {
+                sh 'java -jar //remoting-3301.v4363ddcca_4e7.jar -noReconnect -noKeepAlive -agentLog //agent.log'  // Adjust this command as needed
+            }
+        }
+        stage('Setup Project') {
             steps {
                 // Install dependencies with detailed error reporting
                 sh 'npm ci'
