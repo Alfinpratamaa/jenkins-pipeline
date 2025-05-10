@@ -1,16 +1,28 @@
 pipeline {
     agent any
 
-    options {
-        // Enable Fail-Fast behavior
-        skipStagesAfterUnstable()
-    }
-    
     stages {
-        
-        stage('Setup') {
+        stage('Installing Nodejs with docker'){
+                agent {
+                    docker {
+                        image 'node:20-alpine'
+                    }
+                }
+                
+                steps {
+                    sh 'echo "woi kontol"'
+                }
+        }  
+
+        stage('checking node and npm version') {
             steps {
-                // Install dependencies with detailed error reporting
+                sh 'node -v'
+                sh 'npm -v'
+            }
+        }
+
+        stage('Setup Project') {
+            steps {
                 sh 'npm ci'
             }
             post {
@@ -22,7 +34,6 @@ pipeline {
         
         stage('Code Quality') {
             steps {
-                // Run ESLint
                 sh 'npm run lint'
             }
             post {
@@ -34,7 +45,6 @@ pipeline {
         
         stage('Test') {
             steps {
-                // Run tests with JUnit reporter
                 sh 'npm run test:ci'
             }
             post {
@@ -49,7 +59,6 @@ pipeline {
         
         stage('Build') {
             steps {
-                // Build the application
                 sh 'npm run build'
             }
             post {
