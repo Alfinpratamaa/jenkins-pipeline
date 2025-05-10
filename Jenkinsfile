@@ -2,11 +2,12 @@
 
 pipeline {
     agent {
-        // Use a Docker image with Node.js pre-installed
-        dockerContainer {
-            image 'node:20-alpine'
-        }
+    docker {
+        image 'node:20-alpine'
+        args '-u root:root'  // Optional: Set user for Docker container
     }
+}
+
     
     options {
         // Enable Fail-Fast behavior
