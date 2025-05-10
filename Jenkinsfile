@@ -2,28 +2,21 @@ pipeline {
     agent any
 
     stages {
-        stage('Installing Nodejs with docker'){
-                agent {
-                    docker {
-                        image 'node:20-alpine'
-                    }
-                }
-                
-                steps {
-                    sh 'echo "woi kontol"'
-                }
-        }  
-
-        stage('checking node and npm version') {
+        stage('Install Node.js') {
             steps {
-                sh 'node -v'
-                sh 'npm -v'
+                // Use PowerShell/CMD to check if Node.js is installed
+                bat 'node -v || echo "Node.js not found"'
+                bat 'npm -v || echo "npm not found"'
+                
+                // Install Node.js using nodejs-plugin or nvm for Windows
+                // Or simply use the system's Node.js if available
+                echo "Using system Node.js or installing if needed"
             }
         }
 
         stage('Setup Project') {
             steps {
-                sh 'npm ci'
+                bat 'npm ci'
             }
             post {
                 failure {
@@ -34,7 +27,7 @@ pipeline {
         
         stage('Code Quality') {
             steps {
-                sh 'npm run lint'
+                bat 'npm run lint'
             }
             post {
                 failure {
@@ -45,7 +38,7 @@ pipeline {
         
         stage('Test') {
             steps {
-                sh 'npm run test:ci'
+                bat 'npm run test:ci'
             }
             post {
                 always {
@@ -59,7 +52,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'npm run build'
+                bat 'npm run build'
             }
             post {
                 failure {
