@@ -3,7 +3,7 @@
 pipeline {
     agent {
         // Use a Docker image with Node.js pre-installed
-        docker {
+        dockerContainer {
             image 'node:20-alpine'
         }
     }
