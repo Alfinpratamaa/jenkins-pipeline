@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        dockerContainer {
-           image 'openjdk:11-jre-slim'
-               
-        }
-    }
+    agent any
 
     options {
         // Enable Fail-Fast behavior
